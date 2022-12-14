@@ -1,0 +1,17 @@
+Creare una piccola webapp che permetta, una volta loggati e registrati, di inserire una pagina di diario corta (tipo tweet)
+con dei valori aggiunti a tipo sondaggio.
+
+Essa deve avere una pagina dove è possibile visualizzare tutti i propri record.
+
+In seguito va aggiunta una pagina con una colonna per aggiungere amici ed i record degli amici.
+
+
+
+Progettare il tutto con .NET Core e MySQL.
+
+
+
+Il form deve comprendere un commento di 500 caratteri max e un sondaggio sulla soddisfazione da 1 a 5.
+Di conseguenza il DB memorizzerà utenti, messaggi, amicizie.
+
+
