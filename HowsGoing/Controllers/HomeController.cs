@@ -51,5 +51,27 @@ namespace HowsGoing.Controllers
             }
             return Content("The record has been inserted successfully!");
         }
+
+        [HttpPost]
+        public IActionResult GetAllRecords()
+        {
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            List<Record> records = new List<Record>();
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM RECORDS");
+                cmd.CommandType = CommandType.Text;
+                con.Open();
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    records.Add(new Record(dataReader.GetInt32("RECORD_ID"), dataReader.GetString("RECORD_CONTENT"), dataReader.GetInt32("SATISFACTION")));
+                }
+                dataReader.Close();
+            }
+
+            ViewBag.records = records;
+            return View();
+        }
     }
 }
