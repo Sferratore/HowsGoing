@@ -9,10 +9,12 @@ namespace HowsGoing.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration config;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config)
         {
             _logger = logger;
+            this.config = config;
         }
 
         public IActionResult Index()
@@ -32,10 +34,10 @@ namespace HowsGoing.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendRecord(string message, int satisfaction) //, IConfigurationRoot config)
+        public IActionResult SendRecord(string message, int satisfaction)
         {
-            //string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"]; come cazzo si usa?
-            using (MySqlConnection con = new MySqlConnection("Server=localhost;Port=3306;User=root;Password=DB09Gennaio;Database=howsgoing"))
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO Records (RECORD_CONTENT, SATISFACTION) VALUES ('" + message + "', '" + satisfaction + "');", con);
                 cmd.CommandType = CommandType.Text;
