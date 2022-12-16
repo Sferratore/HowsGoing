@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<h3 style="align-content:center">Login</h3>
+
+<form action="LoginCheck" method="post">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username"/>
+    <br />
+    <label for="password">Password</label>
+    <input type="text" id="password" name="password"/>
+    <br />
+    <input type="submit" value="Login">
+</form>
+<br />
+
+<div style="text-decoration-color: red">
+    Login failed. Try again :(
+</div>

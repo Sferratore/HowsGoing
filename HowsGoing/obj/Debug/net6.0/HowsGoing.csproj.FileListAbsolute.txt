@@ -290,3 +290,4 @@ C:\Users\F.P.S\Desktop\Da qui deve uscirci un progetto mio a tutti i costi\HowsG
 C:\Users\F.P.S\Desktop\Da qui deve uscirci un progetto mio a tutti i costi\HowsGoing\bin\Debug\net6.0\System.Text.Json.dll
 C:\Users\F.P.S\Desktop\Da qui deve uscirci un progetto mio a tutti i costi\HowsGoing\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\F.P.S\Desktop\Da qui deve uscirci un progetto mio a tutti i costi\HowsGoing\bin\Debug\net6.0\MySqlConnector.dll
+C:\Users\F.P.S\Desktop\Da qui deve uscirci un progetto mio a tutti i costi\HowsGoing\bin\Debug\net6.0\RestSharp.dll
