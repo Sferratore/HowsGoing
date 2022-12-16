@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+table {
+    width: 80%
+}
+
+tr{
+    padding: 101px;
+}

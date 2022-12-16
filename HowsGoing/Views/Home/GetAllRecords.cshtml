@@ -10,15 +10,22 @@
 @using System.Diagnostics;
 
 
-<table>
-    <tr>
-        <th>Message</th>
-        <th>Satisfaction</th>
-    </tr>
-    @foreach(Record record in ViewBag.records){ 
+<h3 style="padding-top: 20px">
+    These are your logs:
+</h3>
+
+<div style="padding: 75px">
+    <table>
         <tr>
-            <td>@record.record_content</td>
-            <td>@record.satisfaction</td>
+            <th>Message</th>
+            <th>Satisfaction</th>
         </tr>
-    }
-</table>
+        @foreach(Record record in ViewBag.records){ 
+            <tr>
+                <td>@record.record_content</td>
+                <td>@record.satisfaction</td>
+            </tr>
+        }
+    </table>
+</div>
+  

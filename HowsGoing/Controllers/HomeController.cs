@@ -49,17 +49,17 @@ namespace HowsGoing.Controllers
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
-            return Content("The record has been inserted successfully!");
+            return View("RecordSent");
         }
 
-        [HttpPost]
+
         public IActionResult GetAllRecords()
         {
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
             List<Record> records = new List<Record>();
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM RECORDS");
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM RECORDS", con);
                 cmd.CommandType = CommandType.Text;
                 con.Open();
                 MySqlDataReader dataReader = cmd.ExecuteReader();
