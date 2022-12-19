@@ -8,7 +8,9 @@
 @using MySqlConnector;
 @using System.Data;
 @using System.Diagnostics;
-
+@using System.Web;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
     
@@ -17,7 +19,7 @@
 <div style="padding: 75px">
     <h2>HOME :-D</h2>
     <div style="padding: 25px">
-        Welcome, @ViewBag.username! Howsgoing is a project created by me to help you express yourself about anything you like! <br />
+        Welcome, @Context.Session.GetString("username") ! Howsgoing is a project created by me to help you express yourself about anything you like! <br />  <!-- Add here cookie by his value-->
         Hope to see you around :-)
         <div style="display: flex; justify-content: flex-end">
             <img src="~/howscat.png" />

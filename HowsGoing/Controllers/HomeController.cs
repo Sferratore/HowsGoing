@@ -16,11 +16,12 @@ namespace HowsGoing.Controllers
         {
             _logger = logger;
             this.config = config;
+
         }
 
         public IActionResult Index()
         {
-            if (Request.Cookies["username"] == null)
+            if (HttpContext.Session.Get("username") == null)
                 return View("Login");
 
             return View();
@@ -33,7 +34,7 @@ namespace HowsGoing.Controllers
 
         public IActionResult Postpage()
         {
-            if (Request.Cookies["username"] == null)
+            if (HttpContext.Session.Get("username") == null)
                 return View("Login");
 
             return View();
@@ -59,7 +60,7 @@ namespace HowsGoing.Controllers
         [HttpPost]
         public IActionResult SendRecord(string message, int satisfaction)
         {
-            if (Request.Cookies["username"] == null)
+            if (HttpContext.Session.Get("username") == null)
                 return View("Login");
 
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
@@ -76,7 +77,7 @@ namespace HowsGoing.Controllers
 
         public IActionResult GetAllRecords()
         {
-            if (Request.Cookies["username"] == null)
+            if (HttpContext.Session.Get("username") == null)
                 return View("Login");
 
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
@@ -112,8 +113,7 @@ namespace HowsGoing.Controllers
                 MySqlDataReader dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    Response.Cookies.Append("username", username);
-                    ViewBag.username = username;
+                    HttpContext.Session.SetString("username", username);
                     dataReader.Close();
                     return View("Index");
                 }
