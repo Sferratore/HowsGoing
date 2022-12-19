@@ -19,11 +19,13 @@
         <tr>
             <th>Message</th>
             <th>Satisfaction</th>
+            <th>Author</th>
         </tr>
         @foreach(Record record in ViewBag.records){ 
             <tr>
                 <td>@record.record_content</td>
                 <td>@record.satisfaction</td>
+                <td>@record.user_id</td>
             </tr>
         }
     </table>

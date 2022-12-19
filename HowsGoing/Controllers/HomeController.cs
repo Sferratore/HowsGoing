@@ -66,10 +66,21 @@ namespace HowsGoing.Controllers
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO Records (RECORD_CONTENT, SATISFACTION) VALUES ('" + message + "', '" + satisfaction + "');", con);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO Records (RECORD_CONTENT, SATISFACTION, USER_ID) VALUES ('" + message + "', '" + satisfaction + "', '" + HttpContext.Session.GetString("username") + "');", con);
                 cmd.CommandType = CommandType.Text;
-                con.Open();
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex)
+                {
+                    return Content("An error has occurred with a Database operation: " + ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    return Content("An error has occurred with an operation: " + ex.ToString());
+                }
             }
             return View("RecordSent");
         }
@@ -90,7 +101,7 @@ namespace HowsGoing.Controllers
                 MySqlDataReader dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    records.Add(new Record(dataReader.GetInt32("RECORD_ID"), dataReader.GetString("RECORD_CONTENT"), dataReader.GetInt32("SATISFACTION")));
+                    records.Add(new Record(dataReader.GetInt32("RECORD_ID"), dataReader.GetString("RECORD_CONTENT"), dataReader.GetInt32("SATISFACTION"), dataReader.GetString("USER_ID")));
                 }
                 dataReader.Close();
             }
