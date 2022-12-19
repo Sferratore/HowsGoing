@@ -50,6 +50,14 @@ namespace HowsGoing.Controllers
             return View();
         }
 
+        public IActionResult Friends()
+        {
+            if (HttpContext.Session.Get("username") == null)
+                return View("Login");
+
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -116,6 +124,7 @@ namespace HowsGoing.Controllers
         {
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
             List<User> user = new List<User>();
+            List<User> friends = new List<User>();
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM USERS WHERE USERNAME ='" + username + "' AND PASSWORD = '" + password + "';", con);
@@ -125,13 +134,53 @@ namespace HowsGoing.Controllers
                 while (dataReader.Read())
                 {
                     HttpContext.Session.SetString("username", username);
-                    dataReader.Close();
-                    return View("Index");
                 }
                 dataReader.Close();
-                return View("LoginFailed");
+
+                if (HttpContext.Session.GetString("username") != username)
+                {
+                    return View("LoginFailed");
+                }
+
+                cmd = new MySqlCommand("SELECT USER_ID2 AS FRIEND FROM FRIENDSHIPS WHERE USER_ID1 ='" + username + "' UNION SELECT USER_ID1 AS FRIEND FROM FRIENDSHIPS WHERE USER_ID2 = '" + username + "';", con);
+                cmd.CommandType = CommandType.Text;
+                dataReader = cmd.ExecuteReader();
+                int i = 1;
+                while (dataReader.Read())
+                {
+                    HttpContext.Session.SetString("friend" + i, dataReader.GetString("FRIEND"));
+                }
+                dataReader.Close();
+                return View("Index");
             }
 
+
+        }
+
+        [HttpPost]
+        public IActionResult FriendSearch(string username)
+        {
+
+            if (HttpContext.Session.Get("username") == null)
+                return View("Login");
+
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            List<User> users = new List<User>();
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM USERS WHERE USERNAME NOT IN (SELECT USER_ID1 FROM FRIENDSHIPS WHERE USER_ID2 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME NOT IN (SELECT USER_ID2 FROM FRIENDSHIPS WHERE USER_ID1 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME = '" + username + "';", con);
+                cmd.CommandType = CommandType.Text;
+                con.Open();
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    users.Add(new User(dataReader.GetString("USERNAME"), dataReader.GetString("PASSWORD")));
+                }
+                dataReader.Close();
+            }
+
+            ViewBag.users = users;
+            return View("Friends");
 
         }
 
