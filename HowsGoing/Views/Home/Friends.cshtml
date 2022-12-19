@@ -16,6 +16,33 @@
 <br /><br />
 
 
+@if (ViewBag.users != null)
+{
+    <h4>Results:</h4>
+    <div style="padding: 40px">
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Add?</th>
+            </tr>
+            @foreach (User user in ViewBag.users)
+            {
+                <tr> 
+                    <td>@user.username</td>
+                    <td>
+                        <form asp-action="AddUser" asp-controller="Home" method="post">
+                        <input type="submit" name="Add!" value="Add!">
+                        <input type="text" name="usertoadd" value="@user.username" style="display: none">
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+
+
 
 
 
@@ -50,22 +77,33 @@
 <br /><br />
 
 
-@if (ViewBag.users != null)
+
+
+@if (ViewBag.friendreq != null)
 {
-    <h4>Add other friends!</h4>
+    <h4>Friend requests:</h4>
     <div style="padding: 40px">
         <table>
             <tr>
                 <th>Username</th>
                 <th>Add?</th>
             </tr>
-            @foreach (User user in ViewBag.users)
+            @foreach (User user in ViewBag.friendreq)
             {
                 <tr>
+                    <form asp-action="ConfirmRequest" asp-controller="Home" method="post">
                     <td>@user.username</td>
-                    <td><input type="button" value="Add!"></td>
+                    <td>
+                        <input type="submit" name="Confirm" value="Confirm">
+                        <input type="text" name="usertoadd" value="@user.username" style="display: none">
+                    </td>
+                    </form>
                 </tr>
             }
         </table>
     </div>
 }
+
+
+
+

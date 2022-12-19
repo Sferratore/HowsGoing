@@ -42,6 +42,7 @@ namespace HowsGoing.Controllers
 
         public IActionResult Login()
         {
+            HttpContext.Session.Clear();
             return View();
         }
 
@@ -54,6 +55,24 @@ namespace HowsGoing.Controllers
         {
             if (HttpContext.Session.Get("username") == null)
                 return View("Login");
+
+
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            List<User> usersfriendreq = new List<User>();
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM FRIENDREQUESTS WHERE RECEIVER = '" + HttpContext.Session.GetString("username") + "';", con);
+                cmd.CommandType = CommandType.Text;
+                con.Open();
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    usersfriendreq.Add(new User(dataReader.GetString("SENDER"), "//"));
+                }
+                dataReader.Close();
+            }
+
+            ViewBag.friendreq = usersfriendreq;
 
             return View();
         }
@@ -168,7 +187,7 @@ namespace HowsGoing.Controllers
             List<User> users = new List<User>();
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM USERS WHERE USERNAME NOT IN (SELECT USER_ID1 FROM FRIENDSHIPS WHERE USER_ID2 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME NOT IN (SELECT USER_ID2 FROM FRIENDSHIPS WHERE USER_ID1 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME = '" + username + "';", con);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM USERS WHERE USERNAME NOT IN (SELECT USER_ID1 FROM FRIENDSHIPS WHERE USER_ID2 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME NOT IN (SELECT USER_ID2 FROM FRIENDSHIPS WHERE USER_ID1 = '" + HttpContext.Session.GetString("username") + "') AND USERNAME NOT IN (SELECT SENDER FROM FRIENDREQUESTS WHERE RECEIVER = '" + HttpContext.Session.GetString("username") + "') AND USERNAME NOT IN (SELECT RECEIVER FROM FRIENDREQUESTS WHERE SENDER = '" + HttpContext.Session.GetString("username") + "') AND USERNAME = '" + username + "';", con);
                 cmd.CommandType = CommandType.Text;
                 con.Open();
                 MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -180,9 +199,75 @@ namespace HowsGoing.Controllers
             }
 
             ViewBag.users = users;
+
             return View("Friends");
 
         }
 
+
+        [HttpPost]
+        public IActionResult AddUser(string usertoadd)
+        {
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO FRIENDREQUESTS VALUES ('" + HttpContext.Session.GetString("username") + "', '" + usertoadd + "');", con);
+                cmd.CommandType = CommandType.Text;
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex)
+                {
+                    return Content("An error has occurred with a Database operation: " + ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    return Content("An error has occurred with an operation: " + ex.ToString());
+                }
+            }
+            return View("Friends");
+        }
+
+
+        [HttpPost]
+        public IActionResult ConfirmRequest(string usertoadd)
+        {
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO FRIENDSHIPS VALUES ('" + HttpContext.Session.GetString("username") + "', '" + usertoadd + "');", con);
+                cmd.CommandType = CommandType.Text;
+                try
+                {
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex)
+                {
+                    return Content("An error has occurred with a Database operation: " + ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    return Content("An error has occurred with an operation: " + ex.ToString());
+                }
+
+                cmd = new MySqlCommand("DELETE FROM FRIENDREQUESTS WHERE SENDER ='" + usertoadd + "' AND RECEIVER ='" + HttpContext.Session.GetString("username") + "';", con);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex)
+                {
+                    return Content("An error has occurred with a Database operation: " + ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    return Content("An error has occurred with an operation: " + ex.ToString());
+                }
+            }
+            return View("Friends");
+        }
     }
 }
