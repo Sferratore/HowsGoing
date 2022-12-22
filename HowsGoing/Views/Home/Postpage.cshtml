@@ -4,9 +4,11 @@
 @{
 }
 
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+</head>
 
-
-<form asp-action="SendRecord" asp-controller="Home" method="post">
+<form asp-action="SendRecord" asp-controller="Home" method="post" class="pure-form">
     <label for="message">Heyja! HowsGoing today? :-)</label>
     <input style="height:100px;
     width:400px;"type="text" id="message" name="message"/>
@@ -14,5 +16,5 @@
     <label for="satisfaction">Rate your satisfaction from 1 to 5!</label>
     <input type="range" id="satisfaction" name="satisfaction" min="1" max="5"/>
     <br />
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" class="pure-button pure-button-primary">
 </form>

@@ -4,13 +4,19 @@
 @{
 }
 
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+</head>
+
+
+
 <h3 style="align-content:center">Friends</h3>
 
-<form asp-action="FriendSearch" asp-controller="Home" method="post">
+<form asp-action="FriendSearch" asp-controller="Home" class="pure-form pure-form-stacked" method="post">
     <label for="username">Username</label>
     <input type="text" id="username" name="username"/>
     <br />
-    <input type="submit" value="Find a friend!">
+    <input type="submit" value="Find a friend!" class="pure-button pure-button-primary">
 </form>
 
 <br /><br />
@@ -20,7 +26,7 @@
 {
     <h4>Results:</h4>
     <div style="padding: 40px">
-        <table>
+        <table class="pure-table-striped">
             <tr>
                 <th>Username</th>
                 <th>Add?</th>
@@ -31,7 +37,7 @@
                     <td>@user.username</td>
                     <td>
                         <form asp-action="AddUser" asp-controller="Home" method="post">
-                        <input type="submit" name="Add!" value="Add!">
+                        <input type="submit" name="Add!" value="Add!" class="pure-button pure-button-primary">
                         <input type="text" name="usertoadd" value="@user.username" style="display: none">
                         </form>
                     </td>
@@ -49,7 +55,7 @@
 
 <h4>Your friends:</h4>
     <div style="padding: 25px">
-        <table>
+        <table class="pure-table-striped">
             <tr>
                 <th>Username</th>
             </tr> 
@@ -83,7 +89,7 @@
 {
     <h4>Friend requests:</h4>
     <div style="padding: 40px">
-        <table>
+        <table class="pure-table-striped">
             <tr>
                 <th>Username</th>
                 <th>Add?</th>
@@ -94,7 +100,7 @@
                     <form asp-action="ConfirmRequest" asp-controller="Home" method="post">
                     <td>@user.username</td>
                     <td>
-                        <input type="submit" name="Confirm" value="Confirm">
+                        <input type="submit" name="Confirm" value="Confirm" class="pure-button pure-button-primary">
                         <input type="text" name="usertoadd" value="@user.username" style="display: none">
                     </td>
                     </form>

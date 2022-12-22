@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MWPMrArm36PPLXomTVDzT8w0TXOBgJL81JAo907bfkJEynMwtt2sJoTwnil1kDUZ0nkrvWk7oHqp3KPVaO1EGA==",
+  "dgSpecHash": "w7Sls2xospoKhjjF41czPK3BPcbzZpsU3CEgH2ux3gCu08tYY8wcFvNAXpNtip6m1g4nIAYi+lcz1NATSbOkdQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\F.P.S\\Desktop\\HOWSGOING BACKUP\\HowsGoing-test\\HowsGoing\\HowsGoing.csproj",
+  "projectFilePath": "C:\\Users\\F.P.S\\Desktop\\Da qui deve uscirci un progetto mio a tutti i costi\\HowsGoing\\HowsGoing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\F.P.S\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\F.P.S\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
