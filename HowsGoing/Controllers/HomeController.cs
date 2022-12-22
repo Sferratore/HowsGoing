@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using System.Data;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 
 namespace HowsGoing.Controllers
@@ -28,6 +29,11 @@ namespace HowsGoing.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Register()
         {
             return View();
         }
@@ -118,11 +124,29 @@ namespace HowsGoing.Controllers
             if (HttpContext.Session.Get("username") == null)
                 return View("Login");
 
+            string friendString = "('";
+            int i = 1;
+
+            while (HttpContext.Session.GetString("friend" + i) != null)
+            {
+                if (HttpContext.Session.GetString("friend" + (i + 1)) != null)
+                {
+                    friendString += HttpContext.Session.GetString("friend" + i) + "', '";
+                }
+                else
+                {
+                    friendString += HttpContext.Session.GetString("friend" + i) + "', '" + HttpContext.Session.GetString("username") + "'); ";
+                }
+                i++;
+            }
+
+
+
             string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
             List<Record> records = new List<Record>();
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM RECORDS", con);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM RECORDS WHERE USER_ID IN " + friendString, con);
                 cmd.CommandType = CommandType.Text;
                 con.Open();
                 MySqlDataReader dataReader = cmd.ExecuteReader();
@@ -266,8 +290,77 @@ namespace HowsGoing.Controllers
                 {
                     return Content("An error has occurred with an operation: " + ex.ToString());
                 }
+                int i = 1;
+                while (HttpContext.Session.GetString("friend" + i) != null)
+                {
+                    i++;
+                }
+                HttpContext.Session.SetString("friend" + i, usertoadd);
             }
             return View("Friends");
         }
+
+        [HttpPost]
+        public IActionResult RegistrationCheck(string username, string password, string email)
+        {
+
+            if (username == null || password == null || email == null)
+            {
+                ViewBag.nullValues = "it is";
+                return View("Register");
+            }
+
+            string connectionString = config.GetSection("ConnectionStrings")["HowsGoingContext"];
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM USERS WHERE USERNAME ='" + username + "';", con);
+                cmd.CommandType = CommandType.Text;
+                con.Open();
+                MySqlDataReader dataReader = cmd.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    ViewBag.usernameInvalid = "it is";
+                    return View("Register");
+                }
+                dataReader.Close();
+
+                cmd = new MySqlCommand("SELECT * FROM USERS WHERE EMAIL ='" + email + "';", con);
+                dataReader = cmd.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    ViewBag.emailTaken = "it is";
+                    return View("Register");
+                }
+                dataReader.Close();
+
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                Match match = regex.Match(email);
+                if (match.Success)
+                {
+                    cmd = new MySqlCommand("INSERT INTO USERS VALUES ('" + username + "', '" + password + "', '" + email + "');", con);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        ViewBag.newUserName = username;
+                        return View("RegisterSuccess");
+                    }
+                    catch (MySqlException ex)
+                    {
+                        return Content("An error has occurred with a Database operation: " + ex.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content("An error has occurred with an operation: " + ex.ToString());
+                    }
+                }
+                else
+                {
+                    ViewBag.emailNotRegex = "it is";
+                    return View("Register");
+                }
+            }
+        }
+
+
     }
 }
