@@ -30,6 +30,12 @@
                         </li>
                     </ul>
                 </div>
+                @if(Context.Session.GetString("username") != null)
+                        {
+                            <li class="nav-item" style="display: flex; justify-content: flex-end; list-style-type: none;">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Logout</a>  <!--bug flexend-->
+                            </li>
+                        }
             </div>
         </nav>
     </header>
