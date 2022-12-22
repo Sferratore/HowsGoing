@@ -1,0 +1,5 @@
+-Creare tabella richieste amicizia
+-implementare funzionalità richieste amicizia sulla pagina
+-rimuovere da ricerca utenti che sono inclusi nelle richieste di amicizia già mandate 
+-Sezione homepage mostrare solo post dei propri amici 
+-pulire codice, testare, aggiungere gestione eccezioni

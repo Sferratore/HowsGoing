@@ -10449,11 +10449,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\F.P.S\\Desktop\\Da qui deve uscirci un progetto mio a tutti i costi\\HowsGoing\\HowsGoing.csproj",
+      "projectUniqueName": "C:\\Users\\F.P.S\\Desktop\\HowsGoing-test\\HowsGoing\\HowsGoing.csproj",
       "projectName": "HowsGoing",
-      "projectPath": "C:\\Users\\F.P.S\\Desktop\\Da qui deve uscirci un progetto mio a tutti i costi\\HowsGoing\\HowsGoing.csproj",
+      "projectPath": "C:\\Users\\F.P.S\\Desktop\\HowsGoing-test\\HowsGoing\\HowsGoing.csproj",
       "packagesPath": "C:\\Users\\F.P.S\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\F.P.S\\Desktop\\Da qui deve uscirci un progetto mio a tutti i costi\\HowsGoing\\obj\\",
+      "outputPath": "C:\\Users\\F.P.S\\Desktop\\HowsGoing-test\\HowsGoing\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\F.P.S\\AppData\\Roaming\\NuGet\\NuGet.Config",

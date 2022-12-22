@@ -3,3 +3,107 @@
 *@
 @{
 }
+
+<h3 style="align-content:center">Friends</h3>
+
+<form asp-action="FriendSearch" asp-controller="Home" method="post">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username"/>
+    <br />
+    <input type="submit" value="Find a friend!">
+</form>
+
+<br /><br />
+
+
+@if (ViewBag.users != null)
+{
+    <h4>Results:</h4>
+    <div style="padding: 40px">
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Add?</th>
+            </tr>
+            @foreach (User user in ViewBag.users)
+            {
+                <tr> 
+                    <td>@user.username</td>
+                    <td>
+                        <form asp-action="AddUser" asp-controller="Home" method="post">
+                        <input type="submit" name="Add!" value="Add!">
+                        <input type="text" name="usertoadd" value="@user.username" style="display: none">
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+
+
+
+
+
+
+<h4>Your friends:</h4>
+    <div style="padding: 25px">
+        <table>
+            <tr>
+                <th>Username</th>
+            </tr> 
+        @{
+            int i = 1;
+            List<string> friends = new List<string>();
+            while (Context.Session.GetString("friend" + i) != null)
+            {
+                friends.Add(Context.Session.GetString("friend" + i));
+                i++;
+            }
+        }
+            @foreach (string friendstr in friends)
+            {
+                <tr>
+                    <td>@friendstr</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+
+
+
+<br /><br />
+
+
+
+
+@if (ViewBag.friendreq != null)
+{
+    <h4>Friend requests:</h4>
+    <div style="padding: 40px">
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Add?</th>
+            </tr>
+            @foreach (User user in ViewBag.friendreq)
+            {
+                <tr>
+                    <form asp-action="ConfirmRequest" asp-controller="Home" method="post">
+                    <td>@user.username</td>
+                    <td>
+                        <input type="submit" name="Confirm" value="Confirm">
+                        <input type="text" name="usertoadd" value="@user.username" style="display: none">
+                    </td>
+                    </form>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+
+
+
