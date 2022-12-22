@@ -182,7 +182,7 @@ namespace HowsGoing.Controllers
                 }
                 dataReader.Close();
 
-                if (HttpContext.Session.GetString("username") != username)
+                if (HttpContext.Session.GetString("username") != username || username == null)
                 {
                     return View("LoginFailed");
                 }
